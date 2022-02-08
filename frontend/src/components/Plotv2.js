@@ -15,7 +15,9 @@ class Graph2  extends React.Component {
       
       // let url = 'http://localhost:8000/api/csi'
       // console.log(this.props.gage)
-      let url = 'http://localhost:8000/api/ny17gage/'+this.props.gage
+
+      //URL URL
+      let url = 'http://localhost:8000/api/nyc/gage/'+this.props.gage
       console.log(this.state.gage)
       const res = await fetch(url);
       const info = await res.json();
