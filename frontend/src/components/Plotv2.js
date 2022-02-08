@@ -2,24 +2,27 @@ import React, { useState } from 'react';
 import Plot from 'react-plotly.js';
 
 
-class Graph  extends React.Component {
+
+class Graph2  extends React.Component {
   constructor(props) {
     super(props);
-    const gage = ''
-    this.state = {data: [], layout: {}, frames: [], config: {}};
+    
+    this.state = {gage: '',data: [], layout: {}, frames: [], config: {}};
   }
   
 
   async reload () {
+      
       // let url = 'http://localhost:8000/api/csi'
-      const gage ='laser_18_avg'
-      let url = '/api/ny17gage/'+gage
+      // console.log(this.props.gage)
+      let url = 'http://localhost:8000/api/ny17gage/'+this.props.gage
+      console.log(this.state.gage)
       const res = await fetch(url);
       const info = await res.json();
       console.log(info)
       this.setState({
-        tmstamp: info.tmstamp,
-        gage: info.gage,
+        x: info.x,
+        y: info.y,
       });
       
   }
@@ -33,13 +36,13 @@ class Graph  extends React.Component {
         <Plot
         data={[
           {
-            x: this.state.tmstamp,
-            y: this.state.gage,
+            x: this.state.x,
+            y: this.state.y,
             type: 'scatter',
             // mode: 'points-lines',
             marker: {color: 'red'},
           mode: 'line',
-          name: 'temperature'
+          name: 'laser18'
           },
 
         ]}
@@ -60,4 +63,6 @@ class Graph  extends React.Component {
   }
 }
 
-export default Graph 
+
+
+export default Graph2 
