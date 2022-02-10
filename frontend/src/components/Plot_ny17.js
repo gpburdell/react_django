@@ -8,7 +8,7 @@ class Graph extends React.Component {
 
   async reload () {
       // let url = 'http://localhost:8000/api/ny17'
-      let url = '/api/ny17'
+      let url = 'http://localhost:8000/api/nyc/api/ny17'
       const res = await fetch(url);
       const info = await res.json();
       console.log(info)

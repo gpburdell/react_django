@@ -8,13 +8,13 @@ function Header() {
       <Navbar bg="dark" variant='dark' expand="lg" collapseOnSelect>
       <Container>
         <LinkContainer to='/'>
-          <Navbar.Brand href="/">ProShop</Navbar.Brand>
+          <Navbar.Brand href="/">WJE Analytics</Navbar.Brand>
         </LinkContainer>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="mr-auto">
+          <Nav className="mr-left">
           <LinkContainer to='/cart'>
-            <Nav.Link><i className='fas fa-shopping-cart'></i>Cart</Nav.Link>
+            <Nav.Link><i className='fas fa-shopping-cart'></i>Test1</Nav.Link>
             </LinkContainer>
             <LinkContainer to='/login'>
             <Nav.Link><i className='fas fa-user'></i>Login</Nav.Link>

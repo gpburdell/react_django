@@ -10,6 +10,7 @@ import LoginScreen from './screens/LoginScreen'
 
 import PlotScreen from './screens/PlotScreen'
 import PlotScreen2 from './screens/PlotScreen2'
+import PlotScreen3 from './screens/PlotScreen3'
 import PlotScreen_ny17 from './screens/PlotScreen_ny17'
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
           <Route path='/plot/' component={PlotScreen}  />
 
           <Route path='/plot2/:gage' component={PlotScreen2}  />
+          <Route path='/plot3/:gage' component={PlotScreen3}  />
           <Route path='/plotny17/' component={PlotScreen_ny17} exact />
 
         </Container>
