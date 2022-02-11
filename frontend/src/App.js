@@ -7,6 +7,7 @@ import HomeScreen from './screens/HomeScreen'
 import ProductScreen from './screens/ProductScreen'
 
 import LoginScreen from './screens/LoginScreen'
+import RegisterScreen from './screens/RegisterScreen'
 
 import PlotScreen from './screens/PlotScreen'
 import PlotScreen2 from './screens/PlotScreen2'
@@ -23,6 +24,9 @@ function App() {
           <Route path='/' component={HomeScreen} exact />
           <Route path='/product/:id' component={ProductScreen} />
           <Route path='/login' component={LoginScreen} />
+          <Route path='/register' component={RegisterScreen} />
+
+          
           <Route path='/plot/' component={PlotScreen}  />
 
           <Route path='/plot2/:gage' component={PlotScreen2}  />
