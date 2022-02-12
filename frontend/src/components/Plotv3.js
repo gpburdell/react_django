@@ -7,17 +7,19 @@ class Graph3  extends React.Component {
   constructor(props) {
     super(props);
     
-    this.state = {gage: '',data: [], layout: {}, frames: [], config: {}};
+    this.state = {gagelist: {},dateRange: [], data: [], layout: {}, frames: [], config: {}};
+    
   }
   
   async reload () {
       // let url = 'http://localhost:8000/api/csi'
       // console.log(this.props.gage)
-
+      
       //URL URL
       // let url = 'http://localhost:8000/api/nyc/gage/'+this.props.gage
       let url = 'http://localhost:8000/api/nyc/gage/'
-      console.log(this.state.gage)
+      console.log('inside reload')
+      console.log(this.props.gagelist)
       let date="2022-01-01 00:00:00"
       // const res = await fetch(url);
       // 
@@ -26,9 +28,10 @@ class Graph3  extends React.Component {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({'gage':this.props.gage, 'from_date':date})
+            
+            body: JSON.stringify({'gagelist': this.props.gagelist, 'dateRange':this.props.dateRange})
         })
-
+      console.log(this.state.gagelist)
       const info = await response.json();
       console.log(info)
       this.setState({

@@ -30,7 +30,7 @@ function App() {
           <Route path='/plot/' component={PlotScreen}  />
 
           <Route path='/plot2/:gage' component={PlotScreen2}  />
-          <Route path='/plot3/:gage' component={PlotScreen3}  />
+          <Route path='/plot3/' component={PlotScreen3}  />
           <Route path='/plotny17/' component={PlotScreen_ny17} exact />
 
         </Container>
