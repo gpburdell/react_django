@@ -13,6 +13,7 @@ import PlotScreen from './screens/PlotScreen'
 import PlotScreen2 from './screens/PlotScreen2'
 import PlotScreen3 from './screens/PlotScreen3'
 import PlotScreen_ny17 from './screens/PlotScreen_ny17'
+import PlotScreen_lulling from './screens/PlotScreen_lulling'
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
 
           <Route path='/plot2/:gage' component={PlotScreen2}  />
           <Route path='/plot3/' component={PlotScreen3}  />
+          <Route path='/lulling/' component={PlotScreen_lulling}  />
           <Route path='/plotny17/' component={PlotScreen_ny17} exact />
 
         </Container>
