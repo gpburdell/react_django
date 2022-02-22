@@ -7,6 +7,8 @@ import { USER_LOGIN_REQUEST,
     USER_REGISTER_SUCCESS,
     USER_REGISTER_FAIL, } from '../constants/userConstants'
 
+axios.defaults.baseURL  = "http://10.5.5.168:8000"
+
 export const login = (email,password) => async (dispatch) =>{
     try{
         dispatch({

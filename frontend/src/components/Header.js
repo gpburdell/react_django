@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Navbar, Nav, Container, Row, NavDropdown } from 'react-bootstrap'
 import {LinkContainer} from 'react-router-bootstrap'
 import {logout} from '../actions/userActions'
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+// import { solid, regular, brands } from '@fortawesome///////fontawesome-svg-core/import.macro' // <-- import styles to be used
 
 function Header() {
 
@@ -27,7 +29,7 @@ function Header() {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-left">
           <LinkContainer to='/cart'>
-            <Nav.Link><i className='fas fa-shopping-cart'></i>Test1</Nav.Link>
+            <Nav.Link>Test1</Nav.Link>
             </LinkContainer>
 
             {userInfo ? (

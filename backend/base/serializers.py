@@ -17,9 +17,10 @@ class UserSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField(read_only=True)
     _id = serializers.SerializerMethodField(read_only=True)
     isAdmin = serializers.SerializerMethodField(read_only=True)
+    groups = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = User
-        fields = ['id','_id','username','email','name','isAdmin']
+        fields = ['id','_id','username','email','name','isAdmin','groups']
 
     def get__id(self,obj):
         return obj.id
@@ -33,11 +34,14 @@ class UserSerializer(serializers.ModelSerializer):
             name = obj.email
         return name
 
+    def get_groups(self, obj):
+        return obj.groups.values_list('name', flat=True)
+
 class UserSerializerWithToken(UserSerializer):
     token = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = User
-        fields = ['id','_id','username','email','name','isAdmin','token']
+        fields = ['id','_id','username','email','name','isAdmin','token','groups']
 
     def get_token(self,obj):
         token = RefreshToken.for_user(obj)

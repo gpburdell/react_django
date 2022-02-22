@@ -3,7 +3,7 @@ import Plot from 'react-plotly.js';
 
 
 
-class Graph_lulling_TS  extends React.Component {
+class Graph_Danziger_Digest  extends React.Component {
   constructor(props) {
     super(props);
     
@@ -18,22 +18,14 @@ class Graph_lulling_TS  extends React.Component {
       //URL URL
       
       // let url = 'http://localhost:8000/api/lulling/gage/'
-      let url = 'http://10.5.5.168:8000' +'/api/lulling/gage/'
+      let url = 'http://10.2.3.115:8000' +'/api/danziger/getCurrentData/'
       console.log('inside reload')
       
-      let date="2022-01-01 00:00:00"
+
       // const res = await fetch(url);
       // 
-      const response = await fetch(url,{
-            method:'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            
-            body: JSON.stringify({'gagelist': this.props.gagelist, 'dateRange':this.props.dateRange, 'table':this.props.table})
-        })
-      console.log(this.state.gagelist)
-      console.log(this.props.table)
+      const response = await fetch(url);
+
       const info = await response.json();
       console.log(info)
       this.setState({
@@ -72,4 +64,4 @@ class Graph_lulling_TS  extends React.Component {
   }
 }
 
-export default Graph_lulling_TS
+export default Graph_Danziger_Digest
