@@ -1,3 +1,4 @@
+from optparse import Values
 from django.shortcuts import render
 from rest_framework.decorators import api_view,permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
@@ -15,7 +16,8 @@ from datetime import datetime, date, timedelta
 from django.utils.dateparse import parse_datetime
 from django.utils import timezone
 import numpy as np
-
+import pandas as pd
+import datetime as dt
 import json
 
 # @api_view(['GET'])
@@ -186,7 +188,7 @@ def getCurrentData(request):
 @api_view(['POST'])
 def gage(request):
     data = request.data   #JSONParser().parse(request)
-    print(f'data: {data}')
+    # print(f'data: {data}')
 
     gagelist= data['gagelist']['primary']
     gagelist2= data['gagelist']['secondary']
@@ -197,133 +199,21 @@ def gage(request):
     to_date = date_range[1]
 
 
-    min_y = 1
-    max_y = -1
-    min_y2 = 1
-    max_y2 = -1
-    def get_min_max_y(values,min_y,max_y):
-        min_y =min_y
-        max_y=max_y
-        for p in values:
-            if p != None :
-                if p > max_y:
-                    max_y = p
-                if p < min_y:
-                    min_y = p
-        return min_y, max_y
+    min_y = -1
+    max_y = 1
+    min_y2 = -1
+    max_y2 = 1
 
-    def get_min_max_y2(values,min_y2,max_y2):
-        min_y2 =min_y2
-        max_y2 =max_y2
-        for p in values:
-            if p != None :
-                if p > max_y2:
-                    max_y2 = p
-                if p < min_y2:
-                    min_y2 = p
-        return min_y2, max_y2
-    traces2=[]
-    for index,gage_id in enumerate(gagelist2):
-        print('g2*******************************************')
-        gage = gage_id.get('gage')
-        print(gage)
-        table = gage_id.get('table')
+  
+    traces2,min_y2,max_y2= get_gage_data(gagelist2,from_date,to_date,min_y2,max_y2,secondary=True)
+    print(f'miny2: {min_y2} maxy2: {max_y2}')
 
-        if table == 'Dan502':
-            data = Ladotd502EMonitor502.objects.using('lndb').filter(tmstamp__range=[from_date, to_date]).values('tmstamp',gage)
-        elif table == 'Dan602':
-            data = Ladot602EMonitor602.objects.using('lndb').filter(tmstamp__range=[from_date, to_date]).values('tmstamp',gage)
-
-        elif table == 'Dan501':
-            data = Ladot501WMonitor501.objects.using('lndb').filter(tmstamp__range=[from_date, to_date]).values('tmstamp',gage)
-
-        elif table == 'Dan601':
-            data = Ladot601WMonitor601.objects.using('lndb').filter(tmstamp__range=[from_date, to_date]).values('tmstamp',gage)
-        else: 
-            data = None
-
-        if data.count() <2:
-            pass
-        y_values =[i[gage] for i in data]
-        min_y2_=np.percentile(np.array(y_values),1)*1.2
-        max_y2_=np.percentile(np.array(y_values),99)*1.2
-        if min_y2_ < min_y2:
-            min_y2 = min_y2_
-        if max_y2_ > max_y2:
-            max_y2 = max_y2_
-
-        # min_y2, max_y2 = get_min_max_y(y_values,min_y2,max_y2)
-        traces2 += {
-            "uid": 100+index,
-            "mode": "line",
-            "name": gage_id.get('name'),
-            
-            "type": "scatter",
-            "x": [i['tmstamp'] for i in data],
-            "y": [i[gage] for i in data],
-            "line": {
-                "color": "rgba(180, 180, 180, 1.0)",#colors[index],
-                "width": 1,
-                'dash': 'dash',
-            },
-            "yaxis": 'y2',
-        },
-    traces=[]
-    for index,gage_id in enumerate(gagelist):
-        print('g1*******************************************')
-        gage = gage_id.get('gage')
-        print(gage)
-        table = gage_id.get('table')
-
-        if table == 'Dan502':
-            data = Ladotd502EMonitor502.objects.using('lndb').filter(tmstamp__range=[from_date, to_date]).values('tmstamp',gage)
-        elif table == 'Dan602':
-            data = Ladot602EMonitor602.objects.using('lndb').filter(tmstamp__range=[from_date, to_date]).values('tmstamp',gage)
-
-        elif table == 'Dan501':
-            data = Ladot501WMonitor501.objects.using('lndb').filter(tmstamp__range=[from_date, to_date]).values('tmstamp',gage)
-
-        elif table == 'Dan601':
-            data = Ladot601WMonitor601.objects.using('lndb').filter(tmstamp__range=[from_date, to_date]).values('tmstamp',gage)
-        else: 
-            data = None
-        
-        if data.count() <2:
-            pass
-       
-        y_values =np.array([i[gage] for i in data])
-
-
-        y_values =[i[gage] for i in data]
-        min_y_=np.percentile(np.array(y_values),1)*1.2
-        max_y_=np.percentile(np.array(y_values),99)*1.2
-        if min_y_ < min_y:
-            min_y=min_y_
-        if max_y_ > max_y:
-            max_y=max_y_
-
-        # min_y2, max_y2 = get_min_max_y(y_values,min_y2,max_y2)
-        traces += {
-            "uid": index,
-            "mode": "line",
-            "name": gage_id.get('name'),
-            "type": "scatter",
-            # "yaxis": 'yaxis',
-            "x": [i['tmstamp'] for i in data],
-            "y": y_values,
-            "line": {
-            "color": colors[index]#"rgba(55, 128, 191, 1.0)","width": 1
-            },
-        },
-
-
+    traces,min_y,max_y= get_gage_data(gagelist,from_date,to_date,min_y,max_y,secondary=False)
+    print(f'miny: {min_y} maxy: {max_y}')
     traces = traces +traces2
-
-    ###############################################################
-
+  
     context = {
-    
-    
+ 
     "layout": {
         "title": title,
         "showlegend": "true",
@@ -373,13 +263,108 @@ def gage(request):
 
     return Response(context)
 
+
+def get_min_max_y(values,min_y,max_y):
+    min_y = min_y
+    max_y= max_y
+    if values.min() <min_y:
+        min_y = values.min()
+    if values.max() > max_y:
+        max_y = values.max()
+    return min_y, max_y
+
+
+def get_gage_data(gagelist,from_date,to_date,min_y,max_y,secondary):
+    traces =[]
+    for index,gage_id in enumerate(gagelist):
+        print('ggd*******************************************')
+        gage = gage_id.get('gage')
+        print(gage)
+        table = gage_id.get('table')
+
+        if table == 'Dan502':
+            data = pd.DataFrame(list(Ladotd502EMonitor502.objects.using('lndb').filter(tmstamp__range=[from_date, to_date]).values('tmstamp',gage))).dropna()
+        elif table == 'Dan602':
+            data = pd.DataFrame(list(Ladot602EMonitor602.objects.using('lndb').filter(tmstamp__range=[from_date, to_date]).values('tmstamp',gage))).dropna()
+        elif table == 'Dan501':
+            data = pd.DataFrame(list(Ladot501WMonitor501.objects.using('lndb').filter(tmstamp__range=[from_date, to_date]).values('tmstamp',gage))).dropna()
+        elif table == 'Dan601':
+            data = pd.DataFrame(list(Ladot601WMonitor601.objects.using('lndb').filter(tmstamp__range=[from_date, to_date]).values('tmstamp',gage))).dropna()
+        else: 
+            data = None
+
+        if data.size<2:#data.count() <2:
+            pass
+                
+        tare = gage_id.get('tare')
+        scalar = gage_id.get('scalar')
+        if tare is None:
+            tare = 0.0
+        if scalar is None:
+            scalar =1.0
+            # print(f'tare: {tare}')
+        y= data[gage]*float(scalar)-float(tare)
+
+        min_y, max_y = get_min_max_y(y, min_y, max_y)
+        y = (y).values.tolist()
+        x = data['tmstamp'].dt.to_pydatetime().tolist()
+        
+        if secondary==True:
+            line =  {
+                    "color": "rgba(180, 180, 180, 1.0)",#colors[index],
+                    "width": 1,
+                    'dash': 'dash',
+                },
+            yaxis= 'y2'
+        else:
+            line= {
+            "color": colors[index]#"rgba(55, 128, 191, 1.0)","width": 1
+            },
+            yaxis= 'y'
+
+        traces += {
+            "uid": index,
+            "mode": "line",
+            "name": gage_id.get('name'),
+            "type": "scatter",
+            # "yaxis": 'yaxis',
+            # "x": [i['tmstamp'] for i in data],
+            # "y": y_values,
+            "x":x,
+            "y":y,
+            "line": line,
+            "yaxis":yaxis
+        },
+    # if secondary:
+        
+    #     traces += {
+    #             "uid": 100+index,
+    #             "mode": "line",
+    #             "name": gage_id.get('name'),
+                
+    #             "type": "scatter",
+    #             # "x": [i['tmstamp'] for i in data],
+    #             # "y": [i[gage] for i in data],
+    #             "x":x,
+    #             "y":y,
+    #             "line": {
+    #                 "color": "rgba(180, 180, 180, 1.0)",#colors[index],
+    #                 "width": 1,
+    #                 'dash': 'dash',
+    #             },
+    #             "yaxis": 'y2',
+    #         },
+
+
+    return traces,min_y,max_y
+
 @api_view(['POST'])
 def gage_old(request):
     import json
     print('1----------------------------------')
   
     data = request.data   #JSONParser().parse(request)
-    print(f'data: {data}')
+    #print(f'data: {data}')
 
  
     gagelist= data['gagelist']['primary']
@@ -392,11 +377,6 @@ def gage_old(request):
     to_date = date_range[1]
     table = data['table']
     print('table')
-
-    
-
-
-
 
     # for gage in gagelist:
     #     print('*******************************************')
@@ -483,7 +463,7 @@ def gage_old(request):
         
         if data.count() <2:
             pass
-        
+        print(f'datatype: ${type(data)}')
 
         y_values =[i[gage] for i in data]
  

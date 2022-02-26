@@ -9,5 +9,6 @@ urlpatterns = [
 
    # path('gage/<str:gage>/',views.ny17gage, name="ny17gage"),
     path('gage/',views.gage, name="ngage"),
+    path('gage2/',views.gage2, name="ngage"),
     path('onegage/<str:gage>/',views.onegage, name="onegage"),
 ]
