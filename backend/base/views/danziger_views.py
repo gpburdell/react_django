@@ -218,19 +218,26 @@ def gage(request):
         "title": title,
         "showlegend": "true",
         "legend": {
-		    "orientation": "v",
-		    "x": 1.2,
-            "xanchor": 'left',
-		    "y": 1,
+		    "orientation": "h",
+		    # "x": 1.2,
+            "xanchor": 'bottom',
+		    "y": -0.2,
 		    "font": {
-            "size": 9
+            "size": 8
             },
+
 		"borderwidth": 1
+        },
+        "modebar": {
+            "orientation": 'v',
+            #"bgcolor": 'salmon',
+            # "color": 'white',
+            "activecolor": '#9ED3CD'
         },
         "width": 500,
         "height": 300,
-        "autosize": "true",
-        "margin":{"l":80,"r":100},
+        "autosize": "false",
+        "margin":{"l":80,"r":80,"t":50,"b":100},
         "yaxis": {
             "type": "linear",
             "automargin": "true",
