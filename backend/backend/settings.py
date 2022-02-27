@@ -182,9 +182,12 @@ USE_TZ = False
 STATIC_URL = '/static/'
 MEDIA_URL = '/images/'
 
-STATICFILES_DIR = [
+STATICFILES_DIRS = [
     BASE_DIR / 'static',
+    BASE_DIR / 'frontend/build',
+    BASE_DIR / 'frontend/public',
     BASE_DIR / 'frontend/build/static',
+    # BASE_DIR / 'frontend/build/static/js',
 ]
 
 MEDIA_ROOT = 'static/images'
