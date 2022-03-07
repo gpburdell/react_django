@@ -288,6 +288,7 @@ def get_gage_data(gagelist,from_date,to_date,min_y,max_y,secondary):
         gage = gage_id.get('gage')
         print(gage)
         table = gage_id.get('table')
+        threshold = gage_id.get('threshold')
 
         if table == 'Dan502':
             data = pd.DataFrame(list(Ladotd502EMonitor502.objects.using('lndb').filter(tmstamp__range=[from_date, to_date]).values('tmstamp',gage))).dropna()
@@ -305,6 +306,9 @@ def get_gage_data(gagelist,from_date,to_date,min_y,max_y,secondary):
                 
         tare = gage_id.get('tare')
         scalar = gage_id.get('scalar')
+        if threshold:
+            data = data[data[gage] > threshold[0]]
+            data = data[data[gage] < threshold[1]]
         if tare is None:
             tare = 0.0
         if scalar is None:

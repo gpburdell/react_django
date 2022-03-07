@@ -492,3 +492,23 @@ class Ladot602EZero602(models.Model):
         db_table = 'LADOT_602_E_zero_602'
         unique_together = (('tmstamp', 'recnum'),)
 
+class Ny17Mediandata(models.Model):
+    tmstamp = models.DateTimeField(db_column='TmStamp', primary_key=True)  # Field name made lowercase.
+    recnum = models.BigIntegerField(db_column='RecNum')  # Field name made lowercase.
+    laser_18_med = models.FloatField(db_column='laser_18_Med', blank=True, null=True)  # Field name made lowercase.
+    laser_19_med = models.FloatField(db_column='laser_19_Med', blank=True, null=True)  # Field name made lowercase.
+    laser_29_med = models.FloatField(db_column='laser_29_Med', blank=True, null=True)  # Field name made lowercase.
+    laser_40_med = models.FloatField(db_column='laser_40_Med', blank=True, null=True)  # Field name made lowercase.
+    temp_18_med = models.FloatField(db_column='temp_18_Med', blank=True, null=True)  # Field name made lowercase.
+    temp_19_med = models.FloatField(db_column='temp_19_Med', blank=True, null=True)  # Field name made lowercase.
+    temp_29_med = models.FloatField(db_column='temp_29_Med', blank=True, null=True)  # Field name made lowercase.
+    temp_40_med = models.FloatField(db_column='temp_40_Med', blank=True, null=True)  # Field name made lowercase.
+    laser_18in_med = models.FloatField(db_column='laser_18in_Med', blank=True, null=True)  # Field name made lowercase.
+    laser_19in_med = models.FloatField(db_column='laser_19in_Med', blank=True, null=True)  # Field name made lowercase.
+    laser_29in_med = models.FloatField(db_column='laser_29in_Med', blank=True, null=True)  # Field name made lowercase.
+    laser_40in_med = models.FloatField(db_column='laser_40in_Med', blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'NY17_MedianData'
+        unique_together = (('tmstamp', 'recnum'),)
