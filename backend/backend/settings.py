@@ -23,12 +23,18 @@ print(BASE_DIR)
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-e2i*ku4s6(ae(vly%z!(avzgeop6xetx#@arfsgqj_07fz9i7_'
+SECRET_KEY = '6X8nG!gBmPTBhoc8fK3b99Xx?6z?kfQ8hNdaCGS&YD!mbKmDQH$sHmAmzNa9PAm$9N3A6pjnG8ge$Eps'
+#'django-insecure-e2i*ku4s6(ae(vly%z!(avzgeop6xetx#@arfsgqj_07fz9i7_234'
 
+#SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
+<<<<<<< HEAD
 ALLOWED_HOSTS = ['localhost','*','127.0.0.1']
+=======
+ALLOWED_HOSTS = ['localhost','wje-monitoring.com']
+>>>>>>> c76aa023cff885066477f522065a76943031e75e
 
 
 # Application definition
@@ -139,7 +145,7 @@ DATABASES = {
         'PASSWORD': '1234Temp',
         'HOST': 'canary.wje.com',
         'OPTIONS': {
-                'driver': 'ODBC Driver 17 for SQL Server',
+                'driver': 'SQL Server Native Client 11.0',
             }
         },
     'seismo': {
@@ -165,6 +171,7 @@ DATABASES = {
 }
 
 #                'driver': 'SQL Server Native Client 11.0',
+#                   'driver': 'ODBC Driver 17 for SQL Server',
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
