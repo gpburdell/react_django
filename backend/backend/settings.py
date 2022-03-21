@@ -30,11 +30,11 @@ SECRET_KEY = '6X8nG!gBmPTBhoc8fK3b99Xx?6z?kfQ8hNdaCGS&YD!mbKmDQH$sHmAmzNa9PAm$9N
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-<<<<<<< HEAD
+
 ALLOWED_HOSTS = ['localhost','*','127.0.0.1']
-=======
+
 ALLOWED_HOSTS = ['localhost','wje-monitoring.com']
->>>>>>> c76aa023cff885066477f522065a76943031e75e
+
 
 
 # Application definition
