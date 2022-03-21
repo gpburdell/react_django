@@ -107,6 +107,7 @@ def get_gage_data(gagelist,from_date,to_date,min_y,max_y,secondary):
 
 #
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def gage(request):
     data = request.data   #JSONParser().parse(request)
     # print(f'data: {data}')

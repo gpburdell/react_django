@@ -1,8 +1,12 @@
 class DbRouter:
     def db_for_read(self, model, **hints):
-        "Point all operations on chinook models to 'chinookdb'"
+        "Point all operations to 'lndb'"
         if model._meta.app_label == 'lndb':
             return 'lndb'
+        if model._meta.app_label == 'seismo':
+            return 'seismo'
+        if model._meta.app_label == 'wjeanalytics':
+            return 'wjeanalytics'
         return 'default'
  
     # def db_for_write(self, model, **hints):
@@ -11,8 +15,12 @@ class DbRouter:
     #     return None
 
     def db_for_write(self, model, **hints):
-        "Point all operations on chinook models to 'chinookdb'"
+        "write operations only on default 'default'"
         if model._meta.app_label == 'lndb':
+            return None
+        if model._meta.app_label == 'seismo':
+            return None
+        if model._meta.app_label == 'wjeanalytics':
             return None
         return 'default'
  

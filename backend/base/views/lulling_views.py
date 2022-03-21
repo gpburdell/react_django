@@ -112,6 +112,7 @@ def get_gage_data(gagelist,from_date,to_date,min_y,max_y,secondary):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def onegage(request,gage):
     data = Lulling1Table1.objects.using('lndb').values('tmstamp',gage)
     context = {
@@ -123,6 +124,7 @@ def onegage(request,gage):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def gage(request):
     import json
     print('1----------------------------------')
@@ -296,6 +298,7 @@ def gage(request):
     return Response(context)
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def gage2(request):
     data = request.data   #JSONParser().parse(request)
     # print(f'data: {data}')

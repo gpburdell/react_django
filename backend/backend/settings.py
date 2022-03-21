@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-e2i*ku4s6(ae(vly%z!(avzgeop6xetx#@arfsgqj_07fz9i7_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost','*']
+ALLOWED_HOSTS = ['localhost','*','127.0.0.1']
 
 
 # Application definition
@@ -141,7 +141,27 @@ DATABASES = {
         'OPTIONS': {
                 'driver': 'ODBC Driver 17 for SQL Server',
             }
-        }
+        },
+    'seismo': {
+        'ENGINE': 'mssql',#"mssql",
+        'NAME': 'seismo',
+        'USER': 'seismo',
+        'PASSWORD': 'wje60062Dulles',
+        'HOST': 'canary.wje.com',
+        'OPTIONS': {
+                'driver': 'ODBC Driver 17 for SQL Server',
+            }
+        },
+    'wjeanalytics': {
+        'ENGINE': 'mssql',#"mssql",
+        'NAME': 'wjeanalytics',
+        'USER': 'wjelndb',
+        'PASSWORD': '1234Temp',
+        'HOST': 'canary.wje.com',
+        'OPTIONS': {
+                'driver': 'ODBC Driver 17 for SQL Server',
+            }
+        },
 }
 
 #                'driver': 'SQL Server Native Client 11.0',

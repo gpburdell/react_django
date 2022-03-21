@@ -29,6 +29,7 @@ urlpatterns = [
     path('api/nyc/',include('base.urls.nyc_urls')),
     path('api/lulling/',include('base.urls.lulling_urls')),
     path('api/danziger/',include('base.urls.danziger_urls')),
+    path('api/seismo/',include('base.urls.seismo_urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
