@@ -11,7 +11,7 @@ from django.core import serializers
 from base.serializers import CR1000_Serializer
 
 from rest_framework import status
-from base.models import Ladotd500MainDtldata,Ladotd502EEvent502,Ladotd502EMonitor502,Ladotd502EZero502,Ladot501WEvent501,Ladot501WMonitor501,Ladot501WZero501,Ladot601WMonitor601,Ladot601WEvent601,Ladot601WZero601,Ladot602EMonitor602,Ladot602EEvent602,Ladot602EZero602
+
 from datetime import datetime, date, timedelta
 from django.utils.dateparse import parse_datetime
 from django.utils import timezone
@@ -20,15 +20,19 @@ import pandas as pd
 import datetime as dt
 import json
 
-# @api_view(['GET'])
-# def onegage(request,gage):
-#     data = Lulling1Table1.objects.using('lndb').values('tmstamp',gage)
-#     context = {
-#     'x': [i['tmstamp'] for i in data],
-#     'y': [i[gage] for i in data]
-#     }
-#     #print(context)
-#     return Response(context)
+from base.models import Ladotd500MainDtldata,Ladotd502EEvent502,Ladotd502EMonitor502,Ladotd502EZero502,Ladot501WEvent501,Ladot501WMonitor501,Ladot501WZero501,Ladot601WMonitor601,Ladot601WEvent601,Ladot601WZero601,Ladot602EMonitor602,Ladot602EEvent602,Ladot602EZero602
+from base.analytics_model import DanzBearingEast,DanzBearingEast2,DanzBearingLimits,DanzBearingWest,DanzBearingWest2,DanzLifts,DanzResensyWide1Min,DanzUltraRaw
+
+@api_view(['GET'])
+def lifts(request):
+    data = pd.DataFrame(list(DanzLifts.objects.using('DanzLifts').values('timestamp','verified'))).dropna()
+        
+    context = {
+    'x': [i['timestamp'] for i in data],
+    'y': [i['verified'] for i in data]
+    }
+    #print(context)
+    return Response(context)
 colors =[
     '#1f77b4',  # muted blue
     '#ff7f0e',  # safety orange
@@ -298,6 +302,17 @@ def get_gage_data(gagelist,from_date,to_date,min_y,max_y,secondary):
             data = pd.DataFrame(list(Ladot501WMonitor501.objects.using('lndb').filter(tmstamp__range=[from_date, to_date]).values('tmstamp',gage))).dropna()
         elif table == 'Dan601':
             data = pd.DataFrame(list(Ladot601WMonitor601.objects.using('lndb').filter(tmstamp__range=[from_date, to_date]).values('tmstamp',gage))).dropna()
+        elif table == 'Dan502_event':
+            data = pd.DataFrame(list(Ladotd502EEvent502.objects.using('lndb').filter(tmstamp__range=[from_date, to_date]).values('tmstamp',gage))).dropna()
+        elif table == 'Dan602_event':
+            data = pd.DataFrame(list(Ladot602EEvent602.objects.using('lndb').filter(tmstamp__range=[from_date, to_date]).values('tmstamp',gage))).dropna()
+        elif table == 'Dan501_event':
+            data = pd.DataFrame(list(Ladot501WEvent501.objects.using('lndb').filter(tmstamp__range=[from_date, to_date]).values('tmstamp',gage))).dropna()
+        elif table == 'Dan601_event':
+            data = pd.DataFrame(list(Ladot601WEvent601.objects.using('lndb').filter(tmstamp__range=[from_date, to_date]).values('tmstamp',gage))).dropna()
+        elif table == 'DanzLifts':      
+            data = pd.DataFrame(list(DanzLifts.objects.using('lndb').filter(tmstamp__range=[from_date, to_date]).values('tmstamp',gage))).dropna()
+        
         else: 
             data = None
 
@@ -438,6 +453,7 @@ def gage_old(request):
             data = Ladotd502EMonitor502.objects.using('lndb').filter(tmstamp__range=[from_date, to_date]).values('tmstamp',gage)
         elif table == 'Dan602':
             data = Ladot602EMonitor602.objects.using('lndb').filter(tmstamp__range=[from_date, to_date]).values('tmstamp',gage)
+
         else: 
             data = None
         if data.count() <2:

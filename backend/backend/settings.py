@@ -155,7 +155,7 @@ DATABASES = {
         'PASSWORD': 'wje60062Dulles',
         'HOST': 'canary.wje.com',
         'OPTIONS': {
-                'driver': 'ODBC Driver 17 for SQL Server',
+                'driver': 'SQL Server Native Client 11.0',
             }
         },
     'wjeanalytics': {
@@ -165,7 +165,7 @@ DATABASES = {
         'PASSWORD': '1234Temp',
         'HOST': 'canary.wje.com',
         'OPTIONS': {
-                'driver': 'ODBC Driver 17 for SQL Server',
+                'driver': 'SQL Server Native Client 11.0',
             }
         },
 }

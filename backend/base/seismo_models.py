@@ -430,3 +430,22 @@ class SeismoWaveforms(models.Model):
     class Meta:
         managed = False
         db_table = 'seismo_waveforms'
+
+class HistoMp12626Slm(models.Model):
+    timestamp = models.DateTimeField(primary_key=True)
+    tran_ppv = models.FloatField(blank=True, null=True)
+    tran_hz = models.FloatField(blank=True, null=True)
+    vert_ppv = models.FloatField(blank=True, null=True)
+    vert_hz = models.FloatField(blank=True, null=True)
+    long_ppv = models.FloatField(blank=True, null=True)
+    long_hz = models.FloatField(blank=True, null=True)
+    geophone_ppv = models.FloatField(blank=True, null=True)
+    lmax = models.FloatField(blank=True, null=True)
+    lmin = models.FloatField(blank=True, null=True)
+    l10 = models.FloatField(blank=True, null=True)
+    l90 = models.FloatField(blank=True, null=True)
+    leq = models.FloatField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'histo_mp12626_slm'

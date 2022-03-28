@@ -10,16 +10,16 @@
 from django.db import models
 
 
-class 420Wash4HMedian(models.Model):
-    tmstamp = models.DateTimeField(db_column='TmStamp', blank=True, null=True)  # Field name made lowercase.
-    tilt1_avg = models.FloatField(db_column='Tilt1_Avg', blank=True, null=True)  # Field name made lowercase.
-    tilt2_avg = models.FloatField(db_column='Tilt2_Avg', blank=True, null=True)  # Field name made lowercase.
-    temptilt1_avg = models.FloatField(db_column='TempTilt1_Avg', blank=True, null=True)  # Field name made lowercase.
-    temptilt2_avg = models.FloatField(db_column='TempTilt2_Avg', blank=True, null=True)  # Field name made lowercase.
+# class 420Wash4HMedian(models.Model):
+#     tmstamp = models.DateTimeField(db_column='TmStamp', blank=True, null=True)  # Field name made lowercase.
+#     tilt1_avg = models.FloatField(db_column='Tilt1_Avg', blank=True, null=True)  # Field name made lowercase.
+#     tilt2_avg = models.FloatField(db_column='Tilt2_Avg', blank=True, null=True)  # Field name made lowercase.
+#     temptilt1_avg = models.FloatField(db_column='TempTilt1_Avg', blank=True, null=True)  # Field name made lowercase.
+#     temptilt2_avg = models.FloatField(db_column='TempTilt2_Avg', blank=True, null=True)  # Field name made lowercase.
 
-    class Meta:
-        managed = False
-        db_table = '420Wash_4H_median'
+#     class Meta:
+#         managed = False
+#         db_table = '420Wash_4H_median'
 
 
 class Ladot500DtlDMedian(models.Model):
