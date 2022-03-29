@@ -16,7 +16,7 @@ from base.seismo_models import HistoBe13501,HistoBe13658, HistoBe13833, HistoBe1
     HistoUm10307,HistoUm10308,HistoUm10374,HistoUm12302,HistoUm12319,\
     HistoUm12616,HistoUm14474,HistoUm16265,HistoUm16427,HistoUm16428,\
     HistoUm16429,HistoUm16433,HistoUm16435,HistoUm16455,HistoUm6377,\
-    HistoUm6378,HistoUm6379,HistoUm6380,HistoMp12626Slm,SeismoWaveforms
+    HistoUm6378,HistoUm6379,HistoUm6380,HistoMp12626Slm,HistoUm10374Slm,SeismoWaveforms
 from datetime import datetime, date, timedelta
 from django.utils.dateparse import parse_datetime
 from django.utils import timezone
@@ -381,6 +381,8 @@ def get_gage_data(gagelist,from_date,to_date,min_y,max_y,secondary):
             data = pd.DataFrame(list(HistoUm6380.objects.using('seismo').filter(timestamp__range=[from_date, to_date]).values('timestamp',gage))).dropna()
         elif table == 'histo_mp12626_slm':
             data = pd.DataFrame(list(HistoMp12626Slm.objects.using('seismo').filter(timestamp__range=[from_date, to_date]).values('timestamp',gage))).dropna()
+        elif table == 'histo_um10374_slm':
+            data = pd.DataFrame(list(HistoUm10374Slm.objects.using('seismo').filter(timestamp__range=[from_date, to_date]).values('timestamp',gage))).dropna()
         else: 
             data = None
 
@@ -508,6 +510,8 @@ def get_gage_datahz(gagelist,from_date,to_date,min_y,max_y,secondary):
             data = pd.DataFrame(list(HistoUm6380.objects.using('seismo').filter(timestamp__range=[from_date, to_date]).values(freq,gage))).dropna()
         elif table == 'histo_mp12626_slm':
             data = pd.DataFrame(list(HistoMp12626Slm.objects.using('seismo').filter(timestamp__range=[from_date, to_date]).values(freq,gage))).dropna()
+        elif table == 'histo_um10374_slm':
+            data = pd.DataFrame(list(HistoUm10374Slm.objects.using('seismo').filter(timestamp__range=[from_date, to_date]).values(freq,gage))).dropna()
         else: 
             data = None
 

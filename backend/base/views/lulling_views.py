@@ -49,6 +49,7 @@ def get_gage_data(gagelist,from_date,to_date,min_y,max_y,secondary):
         print(gage)
         table = gage_id.get('table')
         threshold = gage_id.get('threshold')
+        smooth = gage_id.get('smooth')
 
         if table == 'L1':
             data = pd.DataFrame(list(Lulling1Table1.objects.using('lndb').filter(tmstamp__range=[from_date, to_date]).values('tmstamp',gage))).dropna()
@@ -75,8 +76,12 @@ def get_gage_data(gagelist,from_date,to_date,min_y,max_y,secondary):
             # print(f'tare: {tare}')
         y= data[gage]*float(scalar)-float(tare)
 
+        if smooth is not None:
+            y = y.rolling(smooth).median()
+
         min_y, max_y = get_min_max_y(y, min_y, max_y)
         y = (y).values.tolist()
+
         x = data['tmstamp'].dt.to_pydatetime().tolist()
         
         if secondary==True:

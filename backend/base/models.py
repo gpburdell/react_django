@@ -152,6 +152,10 @@ class Lulling1Table1(models.Model):
     sys1_temp_c_e = models.FloatField(db_column='Sys1_Temp_C_E', blank=True, null=True)  # Field name made lowercase.
     sys1_temp_c_c1 = models.FloatField(db_column='Sys1_Temp_C_C1', blank=True, null=True)  # Field name made lowercase.
     sys1_temp_c_c2 = models.FloatField(db_column='Sys1_Temp_C_C2', blank=True, null=True)  # Field name made lowercase.
+    sys1_temp_f_s = models.FloatField(db_column='Sys1_Temp_F_S', blank=True, null=True)  # Field name made lowercase.
+    sys1_temp_f_e = models.FloatField(db_column='Sys1_Temp_F_E', blank=True, null=True)  # Field name made lowercase.
+    sys1_temp_f_c1 = models.FloatField(db_column='Sys1_Temp_F_C1', blank=True, null=True)  # Field name made lowercase.
+    sys1_temp_f_c2 = models.FloatField(db_column='Sys1_Temp_F_C2', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -183,7 +187,13 @@ class Lulling2Table1(models.Model):
     sys2_temp_c_s = models.FloatField(db_column='Sys2_Temp_C_S', blank=True, null=True)  # Field name made lowercase.
     sys2_temp_c_e = models.FloatField(db_column='Sys2_Temp_C_E', blank=True, null=True)  # Field name made lowercase.
     sys2_temp_c_c1 = models.FloatField(db_column='Sys2_Temp_C_C1', blank=True, null=True)  # Field name made lowercase.
-    sys2_temp_c_c1 = models.FloatField(db_column='Sys2_Temp_C_C2', blank=True, null=True)  # Field name made lowercase.
+    sys2_temp_c_c2 = models.FloatField(db_column='Sys2_Temp_C_C2', blank=True, null=True)  # Field name made lowercase.
+    sys2_temp_f_s = models.FloatField(db_column='Sys2_Temp_F_S', blank=True, null=True)  # Field name made lowercase.
+    sys2_temp_f_e = models.FloatField(db_column='Sys2_Temp_F_E', blank=True, null=True)  # Field name made lowercase.
+    sys2_temp_f_c1 = models.FloatField(db_column='Sys2_Temp_F_C1', blank=True, null=True)  # Field name made lowercase.
+    sys2_temp_f_c2 = models.FloatField(db_column='Sys2_Temp_F_C2', blank=True, null=True)  # Field name made lowercase.
+    sys2_temp_c_a = models.FloatField(db_column='Sys2_Temp_C_A', blank=True, null=True)  # Field name made lowercase.
+    sys2_temp_f_a = models.FloatField(db_column='Sys2_Temp_F_A', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -218,6 +228,10 @@ class Lulling3Table1(models.Model):
     sys3_temp_c_c2 = models.FloatField(db_column='Sys3_Temp_C_C2', blank=True, null=True)  # Field name made lowercase.
     vr1000_s_3 = models.FloatField(db_column='Vr1000_S_3', blank=True, null=True)  # Field name made lowercase.
     sys3_loc3_strain_s = models.FloatField(db_column='Sys3_Loc3_Strain_S', blank=True, null=True)  # Field name made lowercase.
+    sys3_temp_f_s = models.FloatField(db_column='Sys3_Temp_F_S', blank=True, null=True)  # Field name made lowercase.
+    sys3_temp_f_e = models.FloatField(db_column='Sys3_Temp_F_E', blank=True, null=True)  # Field name made lowercase.
+    sys3_temp_f_c1 = models.FloatField(db_column='Sys3_Temp_F_C1', blank=True, null=True)  # Field name made lowercase.
+    sys3_temp_f_c2 = models.FloatField(db_column='Sys3_Temp_F_C2', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
