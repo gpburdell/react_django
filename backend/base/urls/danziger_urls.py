@@ -12,4 +12,5 @@ urlpatterns = [
     # path('onegage/<str:gage>/',views.onegage, name="onegage"),
     path('gage/',views.gage, name="gage"),
     path('lifts/',views.lifts, name="lifts"),
+    path('current/',views.getCurrentData, name='getCurrentData')
 ]

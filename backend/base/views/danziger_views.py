@@ -23,16 +23,7 @@ import json
 from base.models import Ladotd500MainDtldata,Ladotd502EEvent502,Ladotd502EMonitor502,Ladotd502EZero502,Ladot501WEvent501,Ladot501WMonitor501,Ladot501WZero501,Ladot601WMonitor601,Ladot601WEvent601,Ladot601WZero601,Ladot602EMonitor602,Ladot602EEvent602,Ladot602EZero602
 from base.analytics_model import DanzBearingEast,DanzBearingEast2,DanzBearingLimits,DanzBearingWest,DanzBearingWest2,DanzLifts,DanzResensyWide1Min,DanzUltraRaw
 
-@api_view(['GET'])
-def lifts(request):
-    data = pd.DataFrame(list(DanzLifts.objects.using('DanzLifts').values('timestamp','verified'))).dropna()
-        
-    context = {
-    'x': [i['timestamp'] for i in data],
-    'y': [i['verified'] for i in data]
-    }
-    #print(context)
-    return Response(context)
+
 colors =[
     '#1f77b4',  # muted blue
     '#ff7f0e',  # safety orange
@@ -45,6 +36,16 @@ colors =[
     '#bcbd22',  # curry yellow-green
     '#17becf'   # blue-teal
     ]
+
+@api_view(['GET',])
+def lifts(request):
+    # data = pd.DataFrame(list(DanzLifts.objects.using('wjeanalytics').values('timestamp','verified'))).dropna()
+    data = DanzLifts.objects.using('wjeanalytics').values('timestamp').order_by('-timestamp')
+    context = {
+    'lifttime': [i['timestamp'] for i in data],
+    }
+    #print(context)
+    return Response(context)
 
 @api_view(['GET'])
 def getCurrentData(request):
