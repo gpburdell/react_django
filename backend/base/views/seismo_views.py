@@ -52,7 +52,7 @@ colors =[
 @permission_classes([IsAuthenticated])
 def gage(request):
     data = request.data   #JSONParser().parse(request)
-    print(f'data: {data}')
+    # print(f'data: {data}')
 
     gagelist= data['gagelist']['primary']
     # gagelist2= data['gagelist']['secondary']
@@ -61,6 +61,16 @@ def gage(request):
     date_range = data['dateRange']['dateRange']
     from_date = date_range[0]
     to_date = date_range[1]
+
+    # y_axes_range = data['config']['y_axes_range']
+
+    # y_axes_label = data.get('config').get('y_axes_label')
+    if (data.get('config') is not None):
+        y_axes_label = data['config'].get('y_axes_label')
+        y_axes_range = data['config'].get('y_axes_range')
+
+    else:
+        y_axes_label ='default'
 
 
     min_y = -.001
@@ -73,9 +83,12 @@ def gage(request):
     # print(f'miny2: {min_y2} maxy2: {max_y2}')
 
     traces,min_y,max_y= get_gage_data(gagelist,from_date,to_date,min_y,max_y,secondary=False)
-    print(f'miny: {min_y} maxy: {max_y}')
+    # print(f'miny: {min_y} maxy: {max_y}')
     # traces = traces +traces2
-  
+    # if (y_axes_range is not None):
+    min_y = y_axes_range[0]
+    max_y = y_axes_range[1]
+
     context = {
  
     "layout": {
@@ -109,7 +122,7 @@ def gage(request):
                 min_y,
                 max_y
             ],
-            "title": "PPV (in/s)",
+            "title": y_axes_label,
             "autorange": "true"
         },
         "yaxis2": {
@@ -311,7 +324,7 @@ def get_table_data(table,from_date,to_date):
 def get_gage_data(gagelist,from_date,to_date,min_y,max_y,secondary):
     traces =[]
     for index,gage_id in enumerate(gagelist):
-        print('ggd*******************************************')
+        #print('ggd*******************************************')
         gage = gage_id.get('gage')
         print(gage)
         table = gage_id.get('table')
