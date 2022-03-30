@@ -362,28 +362,11 @@ def get_gage_data(gagelist,from_date,to_date,min_y,max_y,secondary):
             "line": line,
             "yaxis":yaxis
         },
-    # if secondary:
-        
-    #     traces += {
-    #             "uid": 100+index,
-    #             "mode": "line",
-    #             "name": gage_id.get('name'),
-                
-    #             "type": "scatter",
-    #             # "x": [i['tmstamp'] for i in data],
-    #             # "y": [i[gage] for i in data],
-    #             "x":x,
-    #             "y":y,
-    #             "line": {
-    #                 "color": "rgba(180, 180, 180, 1.0)",#colors[index],
-    #                 "width": 1,
-    #                 'dash': 'dash',
-    #             },
-    #             "yaxis": 'y2',
-    #         },
 
 
     return traces,min_y,max_y
+
+
 
 @api_view(['POST'])
 def gage_old(request):
