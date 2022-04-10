@@ -62,28 +62,46 @@ def get_gage_data(gagelist,from_date,to_date,min_y,max_y,secondary):
 
         if data.size<2:#data.count() <2:
             pass
-                
+        
         tare = gage_id.get('tare')
         scalar = gage_id.get('scalar')
-        if threshold:
-            data = data[data[gage] > threshold[0]]
-            data = data[data[gage] < threshold[1]]
-        
+        # if threshold:
+        #     data = data[data[gage] > threshold[0]]
+        #     data = data[data[gage] < threshold[1]]
+         
         if tare is None:
             tare = 0.0
         if scalar is None:
             scalar =1.0
             # print(f'tare: {tare}')
-        y= data[gage]*float(scalar)-float(tare)
+        
+        data = data.set_index('tmstamp')
+        
+        # smooth =10
 
         if smooth is not None:
-            y = y.rolling(smooth).median()
+            data = data.rolling(smooth).std()
+            #data = data.resample('5T').sum().median()
+        data = data.reset_index()
+        data = data.dropna()
+
+
+        data[gage]= data[gage]*float(scalar)-float(tare)
+
+        if threshold:
+            data = data[data[gage] > threshold[0]]
+            data = data[data[gage] < threshold[1]]
+        y= data[gage]
 
         min_y, max_y = get_min_max_y(y, min_y, max_y)
         y = (y).values.tolist()
 
-        x = data['tmstamp'].dt.to_pydatetime().tolist()
         
+#
+        x = data['tmstamp'].dt.to_pydatetime().tolist()
+
+        #x = data.index.values.dt.to_pydatetime().tolist()
+        #data.to_csv('data3.csv')
         if secondary==True:
             line =  {
                     "color": "rgba(180, 180, 180, 1.0)",#colors[index],
@@ -110,9 +128,7 @@ def get_gage_data(gagelist,from_date,to_date,min_y,max_y,secondary):
             "line": line,
             "yaxis":yaxis
         },
-
-
-
+    #print(traces)
     return traces,min_y,max_y
 
 
@@ -311,11 +327,17 @@ def gage2(request):
     gagelist= data['gagelist']['primary']
     gagelist2= data['gagelist'].get('secondary')
     title = data['gagelist'].get('title')
-    y_axis_label = data['gagelist'].get('y_axis_label')
+    #y_axis_label = data['gagelist'].get('y_axis_label')
     
     date_range = data['dateRange']['dateRange']
     from_date = date_range[0]
     to_date = date_range[1]
+
+    # y_axes_label = data.get('config').get('y_axes_label')
+    if (data.get('config') is not None):
+        y_axis_label = data['config'].get('y_axis_label')
+
+
 
     min_y = -1
     max_y = 1
@@ -329,7 +351,11 @@ def gage2(request):
         traces2,min_y2,max_y2= get_gage_data(gagelist2,from_date,to_date,min_y2,max_y2,secondary=True)
         traces = traces +traces2
 
-
+    if (data.get('config') is not None):
+        y_axes_range = data['config'].get('y_axes_range')
+        min_y = y_axes_range[0]
+        max_y = y_axes_range[1]
+      
     
   
     context = {

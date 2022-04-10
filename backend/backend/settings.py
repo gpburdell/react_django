@@ -31,7 +31,7 @@ SECRET_KEY = '6X8nG!gBmPTBhoc8fK3b99Xx?6z?kfQ8hNdaCGS&YD!mbKmDQH$sHmAmzNa9PAm$9N
 DEBUG = False
 
 
-ALLOWED_HOSTS = ['localhost','*','127.0.0.1']
+#ALLOWED_HOSTS = ['localhost','*','127.0.0.1']
 
 ALLOWED_HOSTS = ['localhost','wje-monitoring.com']
 
