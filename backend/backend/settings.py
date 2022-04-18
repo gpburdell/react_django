@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os
+import mysql.connector
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -167,6 +168,22 @@ DATABASES = {
         'OPTIONS': {
                 'driver': 'SQL Server Native Client 11.0',
             }
+        },
+    'resensys': {
+        'NAME': 'wje_danziger',
+        'ENGINE': 'mysql.connector.django',
+        'USER': 'wje_danziger',
+        'PASSWORD': 'srgiim7p:-0/8bnr',
+        'HOST': 'resensys.net',
+        'PORT':'',
+        'encoding':'utf-8',
+        
+
+        'OPTIONS': {
+        'ssl_disabled': True,
+        # 'ssl': False,
+          'autocommit': True,
+            },
         },
 }
 

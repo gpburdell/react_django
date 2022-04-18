@@ -7,6 +7,8 @@ class DbRouter:
             return 'seismo'
         if model._meta.app_label == 'wjeanalytics':
             return 'wjeanalytics'
+        if model._meta.app_label == 'resensys':
+            return 'resensys'
         return 'default'
  
     # def db_for_write(self, model, **hints):
@@ -21,6 +23,8 @@ class DbRouter:
         if model._meta.app_label == 'seismo':
             return None
         if model._meta.app_label == 'wjeanalytics':
+            return None
+        if model._meta.app_label == 'resensys':
             return None
         return 'default'
  

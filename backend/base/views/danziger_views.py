@@ -21,7 +21,7 @@ import datetime as dt
 import json
 
 from base.models import Ladotd500MainDtldata,Ladotd502EEvent502,Ladotd502EMonitor502,Ladotd502EZero502,Ladot501WEvent501,Ladot501WMonitor501,Ladot501WZero501,Ladot601WMonitor601,Ladot601WEvent601,Ladot601WZero601,Ladot602EMonitor602,Ladot602EEvent602,Ladot602EZero602
-from base.analytics_model import DanzBearingEast,DanzBearingEast2,DanzBearingLimits,DanzBearingWest,DanzBearingWest2,DanzLifts,DanzResensyWide1Min,DanzUltraRaw
+from base.analytics_model import DanzBearingEast,DanzBearingEast2,DanzBearingLimits,DanzBearingWest,DanzBearingWest2,DanzLifts,DanzResensyWide1Min,DanzUltraRaw,Resensys1HMedian
 
 
 colors =[
@@ -55,6 +55,17 @@ def get_dataframe(gage,table,from_date, to_date):
         data = pd.DataFrame(list(Ladot501WEvent501.objects.using('lndb').filter(tmstamp__range=[from_date, to_date]).values('tmstamp',gage))).dropna()
     elif table == 'Dan601_event':
         data = pd.DataFrame(list(Ladot601WEvent601.objects.using('lndb').filter(tmstamp__range=[from_date, to_date]).values('tmstamp',gage))).dropna()
+    elif table == 'ultra':
+        data = pd.DataFrame(list(DanzUltraRaw.objects.using('wjeanalytics').filter(timestamp__range=[from_date, to_date],sensorname__exact=gage).order_by('timestamp').values('timestamp','sensordata'))).dropna()
+        print(data)
+        data = data.rename(columns = {'timestamp':'tmstamp','sensordata':gage})
+
+    elif table == 'resensys_1H_median':
+        print('resensys')
+        data = pd.DataFrame(list(Resensys1HMedian.objects.using('wjeanalytics').filter(timestamp__range=[from_date, to_date],sensorname__exact=gage).order_by('timestamp').values('timestamp','sensorvalue'))).dropna()
+        
+        data = data.rename(columns = {'timestamp':'tmstamp','sensorvalue':gage})
+
     elif table == 'DanzLifts':      
         data = pd.DataFrame(list(DanzLifts.objects.using('lndb').filter(tmstamp__range=[from_date, to_date]).values('tmstamp',gage))).dropna()
     
@@ -334,9 +345,10 @@ def gage(request):
         traces = traces +traces2
 
     if (data.get('config') is not None):
-        y_axes_range = data['config'].get('y_axes_range')
-        min_y = y_axes_range[0]
-        max_y = y_axes_range[1]
+        if (data['config'].get('y_axes_range') is not None):
+            y_axes_range = data['config'].get('y_axes_range')
+            min_y = y_axes_range[0]
+            max_y = y_axes_range[1]
 
     context = {
  
