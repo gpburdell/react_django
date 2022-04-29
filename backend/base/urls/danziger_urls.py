@@ -13,5 +13,6 @@ urlpatterns = [
     path('gage/',views.gage, name="gage"),
     path('lifts/',views.lifts, name="lifts"),
     path('skew/',views.skew,name='skew'),
+    path('get_bearings_event/',views.get_bearings_event,name='get_bearings_event'),
     path('current/',views.getCurrentData, name='getCurrentData')
 ]

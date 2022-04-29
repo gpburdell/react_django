@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from django.contrib.auth.models import User
-
+from django_pandas.io import read_frame
 
 from django.core import serializers
 from base.serializers import CR1000_Serializer
@@ -21,7 +21,7 @@ import datetime as dt
 import json
 
 from base.models import Ladotd500MainDtldata,Ladotd502EEvent502,Ladotd502EMonitor502,Ladotd502EZero502,Ladot501WEvent501,Ladot501WMonitor501,Ladot501WZero501,Ladot601WMonitor601,Ladot601WEvent601,Ladot601WZero601,Ladot602EMonitor602,Ladot602EEvent602,Ladot602EZero602
-from base.analytics_model import DanzBearingEast,DanzBearingEast2,DanzBearingLimits,DanzBearingWest,DanzBearingWest2,DanzLifts,DanzResensyWide1Min,DanzUltraRaw,Resensys1HMedian
+from base.analytics_model import DanzBearingEast,DanzBearingEast2,DanzBearingLimits,DanzBearingWest,DanzBearingWest2,DanzLifts,DanzResensyWide1Min,DanzUltraRaw,Resensys1HMedian,DanzBearingEast2,DanzBearingWest2
 
 
 colors =[
@@ -36,6 +36,55 @@ colors =[
     '#bcbd22',  # curry yellow-green
     '#17becf'   # blue-teal
     ]
+
+limits_dict = {'sensor_0_banda': {'west': 0.002, 'east': 0.0025},
+ 'sensor_1_banda': {'west': 0.003, 'east': 0.003},
+ 'sensor_2_banda': {'west': 0.0035, 'east': 0.003},
+ 'sensor_3_banda': {'west': 0.002, 'east': 0.0025},
+ 'sensor_4_banda': {'west': 0.0025, 'east': 0.0025},
+ 'sensor_5_banda': {'west': 0.003, 'east': 0.0035},
+ 'sensor_6_banda': {'west': 0.003, 'east': 0.0035},
+ 'sensor_7_banda': {'west': 0.002, 'east': 0.003},
+ 'sensor_8_banda': {'west': 0.002, 'east': 0.002},
+ 'sensor_9_banda': {'west': 0.004, 'east': 0.0025},
+ 'sensor_10_banda': {'west': 0.0035, 'east': 0.002},
+ 'sensor_11_banda': {'west': 0.002, 'east': 0.002},
+ 'sensor_12_banda': {'west': 0.002, 'east': 0.0015},
+ 'sensor_13_banda': {'west': 0.003, 'east': 0.0025},
+ 'sensor_14_banda': {'west': 0.003, 'east': 0.0025},
+ 'sensor_15_banda': {'west': 0.002, 'east': 0.002},
+ 'sensor_0_bandb': {'west': 0.003, 'east': 0.003},
+ 'sensor_1_bandb': {'west': 0.0045, 'east': 0.005},
+ 'sensor_2_bandb': {'west': 0.0045, 'east': 0.006},
+ 'sensor_3_bandb': {'west': 0.0025, 'east': 0.003},
+ 'sensor_4_bandb': {'west': 0.004, 'east': 0.004},
+ 'sensor_5_bandb': {'west': 0.007, 'east': 0.006},
+ 'sensor_6_bandb': {'west': 0.007, 'east': 0.006},
+ 'sensor_7_bandb': {'west': 0.004, 'east': 0.004},
+ 'sensor_8_bandb': {'west': 0.004, 'east': 0.003},
+ 'sensor_9_bandb': {'west': 0.007, 'east': 0.006},
+ 'sensor_10_bandb': {'west': 0.008, 'east': 0.006},
+ 'sensor_11_bandb': {'west': 0.0055, 'east': 0.003},
+ 'sensor_12_bandb': {'west': 0.002, 'east': 0.002},
+ 'sensor_13_bandb': {'west': 0.004, 'east': 0.004},
+ 'sensor_14_bandb': {'west': 0.0045, 'east': 0.004},
+ 'sensor_15_bandb': {'west': 0.0025, 'east': 0.003},
+ 'sensor_0_bandc': {'west': 0.002, 'east': 0.002},
+ 'sensor_1_bandc': {'west': 0.003, 'east': 0.003},
+ 'sensor_2_bandc': {'west': 0.003, 'east': 0.003},
+ 'sensor_3_bandc': {'west': 0.0016, 'east': 0.002},
+ 'sensor_4_bandc': {'west': 0.003, 'east': 0.003},
+ 'sensor_5_bandc': {'west': 0.005, 'east': 0.004},
+ 'sensor_6_bandc': {'west': 0.005, 'east': 0.005},
+ 'sensor_7_bandc': {'west': 0.004, 'east': 0.0025},
+ 'sensor_8_bandc': {'west': 0.0025, 'east': 0.0025},
+ 'sensor_9_bandc': {'west': 0.004, 'east': 0.005},
+ 'sensor_10_bandc': {'west': 0.0035, 'east': 0.004},
+ 'sensor_11_bandc': {'west': 0.003, 'east': 0.0025},
+ 'sensor_12_bandc': {'west': 0.002, 'east': 0.0025},
+ 'sensor_13_bandc': {'west': 0.0025, 'east': 0.002},
+ 'sensor_14_bandc': {'west': 0.0035, 'east': 0.0025},
+ 'sensor_15_bandc': {'west': 0.002, 'east': 0.002}}
 
 def get_dataframe(gage,table,from_date, to_date):
             
@@ -84,6 +133,46 @@ def lifts(request):
     }
     #print(context)
     return Response(context)
+
+@api_view(['POST',])
+def get_bearings_event(request):
+    print('-------------get_bearings_event-------------')
+    data = request.data
+
+    date = data['dateRange']
+    # print(type(json.loads(date)))
+    # print(f'date: {json.loads(date)}')
+    date = date
+    from_date = date[0]
+    print(f'fromdate: {from_date}')
+    to_date = date[1]
+    print(f'todate: {to_date}')
+    limits =  pd.DataFrame.from_dict(limits_dict)
+
+    # data_bearings_West = pd.DataFrame(list(DanzBearingWest2.objects.using('wjeanalytics').filter(timestamp__range=[from_date, to_date]).values('timestamp','sensor_0_banda')))
+    data_bearings_West = DanzBearingWest2.objects.using('wjeanalytics').filter(timestamp__range=[from_date, to_date]).all()
+    df = read_frame(data_bearings_West)
+    df = df.set_index('timestamp')
+    df = df.drop(['comment','valid'], axis=1)
+    # print(df.columns)
+    west_limit = limits.loc['west']
+    for col in df.columns:
+        # print(f'col: {col}')
+        # print(df)
+        # print(west_limit)
+        # print(f'value: {df[{col}]}')
+        # print(f'west_l: {west_limit[{col}]}')
+        df[col] = 100 * df[col] / west_limit[col]
+    df['maximum'] = df.max(axis=1)
+    df = df.reset_index()
+    
+    print(df)
+    
+    context = {
+        
+    }
+    #print(context)
+    return Response(df.to_json())
 
 @api_view(['GET'])
 def getCurrentData(request):
@@ -255,10 +344,24 @@ def skew(request):
     min_y2 = -.001
     max_y2 = .001
 
-    print('head to skew function')
-    traces,min_y,max_y= get_skew_data(gagelist,from_date,to_date,min_y,max_y,0)
-    traces2,min_y,max_y= get_skew_data(gagelist,from_date,to_date,min_y,max_y,1)
-    traces = traces + traces2
+
+    if (data.get('config') is not None):
+        if (data['config'].get('longskew') is not None):
+            longskew = data['config'].get('longskew')
+
+    print(f'longskew: {longskew}\n')
+    # Check to see if we need standard skew or the long skew
+    if longskew == True:
+        print('head to longskew function')
+        traces,min_y,max_y= get_longskew_data(gagelist,from_date,to_date,min_y,max_y)
+    else:
+
+        print('head to skew function')
+        traces,min_y,max_y= get_skew_data(gagelist,from_date,to_date,min_y,max_y,0)
+        traces2,min_y,max_y= get_skew_data(gagelist,from_date,to_date,min_y,max_y,1)
+        traces = traces + traces2
+
+
     context = {
  
     "layout": {
@@ -319,6 +422,8 @@ def skew(request):
 
 @api_view(['POST'])
 def gage(request):
+    # Function to pull standard time history data from Danziger logger data tables
+    #
     data = request.data   #JSONParser().parse(request)
     # print(f'data: {data}')
 
@@ -340,10 +445,13 @@ def gage(request):
 
 
     traces,min_y,max_y= get_gage_data(gagelist,from_date,to_date,min_y,max_y,secondary=False)
+
+    # Determine if there are plots to be shown on secondary axis
     if gagelist2 is not None:
         traces2,min_y2,max_y2= get_gage_data(gagelist2,from_date,to_date,min_y2,max_y2,secondary=True)
         traces = traces +traces2
 
+    # Determine if there is a predefined range
     if (data.get('config') is not None):
         if (data['config'].get('y_axes_range') is not None):
             y_axes_range = data['config'].get('y_axes_range')
@@ -557,7 +665,6 @@ def get_skew_data(gagelist,from_date,to_date,min_y,max_y,index):
     data_one = get_dataframe(gage_one,table_one,from_date, to_date)
     
     data_two = get_dataframe(gage_two,table_two,from_date, to_date)
-
     
     data_one = data_one.set_index('tmstamp')
     data_two = data_two.set_index('tmstamp')
@@ -600,8 +707,8 @@ def get_skew_data(gagelist,from_date,to_date,min_y,max_y,index):
 
     return traces,min_y,max_y
 
-def get_skewlong_data(gagelist,from_date,to_date,min_y,max_y):
-    print('-------------skew funtion----------')
+def get_longskew_data(gagelist,from_date,to_date,min_y,max_y):
+    print('-------------longskew funtion----------')
     traces =[]
 
     #One side
@@ -621,8 +728,9 @@ def get_skewlong_data(gagelist,from_date,to_date,min_y,max_y):
     
     data_one = data_one.resample('2S').mean()
     data_two = data_two.resample('2S').mean()
-    
-    data_east['east'] = (data_one['gage_one'] + data_two['gage_two']) /2
+
+    print(f'data1: {data_one}')
+    data_east = (data_one[gage_one] + data_two[gage_two]) /2
 
     gage_three = gagelist[1].get('gage_one')
     gage_four = gagelist[1].get('gage_two')
@@ -641,29 +749,21 @@ def get_skewlong_data(gagelist,from_date,to_date,min_y,max_y):
     data_three = data_three.resample('2S').mean()
     data_four = data_four.resample('2S').mean()
     
-    data_west['west'] = (data_three['gage_one'] + data_four['gage_two']) /2
+    data_west = (data_three[gage_three] + data_four[gage_four]) /2
 
-
-
-
-    skew =data_east.subtract(data_west['west'], axis='rows')
-
-
-
+    #skew =data_east - data_west
+    skew = data_east.subtract(data_west, axis='rows')
+    print('inside dataeast')
 
 
     skew = skew.reset_index()
     skew = skew.dropna()
-    print('inside skew')
-    print(skew)
-    y= skew['east']
 
-    min_y, max_y = get_min_max_y(y, min_y, max_y)
-    y = (y).values.tolist()
+    min_y, max_y = get_min_max_y(skew[0].values, min_y, max_y)
+    y = skew[0].values.tolist()
 
     x = skew['tmstamp'].dt.to_pydatetime().tolist()
-    
-
+ 
     line= {
     "color": colors[0]#"rgba(55, 128, 191, 1.0)","width": 1
     },
